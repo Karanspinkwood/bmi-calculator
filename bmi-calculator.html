@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BMI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+    
+    h1, h2 {
+      color: #333333;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 3px;
+      border: 1px solid #dddddd;
+      box-sizing: border-box;
+    }
+
+    input[type="number"]:focus {
+      transform: scale(1.01);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+        background-color: black;
+        transition: 0.5s ease-in-out;
+        scale: 1.01;
+    }
+    
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    
+    .image {
+      display: none;
+      margin: 0 auto;
+      max-width: 100%;
+      margin-top: 20px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media screen and (max-width: 600px) {
+    .container {
+      padding: 10px;
+    }
+
+    .image {
+      margin-top: 10px;
+    }
+
+    #button-container {
+      margin-top: 10px;
+    }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BMI Calculator</h1>
+  
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" min="0" step="0.1" required>
+  
+    <label for="height">Height (m):</label>
+    <input type="number" id="height" min="0" step="0.01" required>
+  
+    <button onclick="calculateBMI()">Calculate</button>
+  
+    <h2>Your Results</h2>
+  
+    <p id="result"></p>
+  
+    <img id="underweight-image" class="image" src="underweight_image.png">
+    <img id="normalweight-image" class="image" src="normalweight_image.png">
+    <img id="overweight-image" class="image" src="overweight_image.png">
+    <img id="obese-image" class="image" src="obese_image.png">
+  
+    <button onclick="resetFields()">Reset</button>
+  </div>
+  
+  <script>
+    function calculateBMI() {
+      var weightInput = document.getElementById("weight");
+      var heightInput = document.getElementById("height");
+      var resultParagraph = document.getElementById("result");
+      var underweightImage = document.getElementById("underweight-image");
+      var normalweightImage = document.getElementById("normalweight-image");
+      var overweightImage = document.getElementById("overweight-image");
+      var obeseImage = document.getElementById("obese-image");
+      
+      var weight = parseFloat(weightInput.value);
+      var height = parseFloat(heightInput.value);
+      
+      if (isNaN(weight) || isNaN(height)) {
+        resultParagraph.innerHTML = "Please enter valid weight and height values.";
+        resetImages();
+        return;
+      }
+      
+      var bmi = weight / (height * height);
+      var bodyType;
+      
+      if (bmi < 18.5) {
+        bodyType = "Underweight";
+        showImage("underweight-image");
+      } else if (bmi <= 24.9) {
+        bodyType = "Normal Weight";
+        showImage("normalweight-image");
+      } else if (bmi <= 29.9) {
+        bodyType = "Overweight";
+        showImage("overweight-image");
+      } else {
+        bodyType = "Obese";
+        showImage("obese-image");
+      }
+      
+      resultParagraph.innerHTML = "Your BMI: " + bmi.toFixed(2) + " (" + bodyType + ")";
+    }
+    
+    function resetFields() {
+      document.getElementById("weight").value = "";
+      document.getElementById("height").value = "";
+      document.getElementById("result").innerHTML = "";
+      resetImages();
+    }
+    
+    function resetImages() {
+      var images = document.getElementsByClassName("image");
+      for (var i = 0; i < images.length; i++) {
+        images[i].style.display = "none";
+      }
+    }
+    
+    function showImage(imageId) {
+      resetImages();
+      document.getElementById(imageId).style.display = "block";
+    }
+  </script>
+</body>
+</html>
